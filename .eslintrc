@@ -1,0 +1,11 @@
+{
+  "plugins": [
+    "prettier",
+    "react-app"
+  ],
+  "rules": {
+    "prettier/prettier": "error",
+    "semi": ["error", "never"],
+    "quotes": ["error", "single", { "allowTemplateLiterals": true }]
+  }
+}
