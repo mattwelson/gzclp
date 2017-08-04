@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 
 import NoMatch from './NoMatch'
 import SettingsPage from './SettingsPage'
+import defaults from '../../data/defaults.yml'
 
 import './App.css'
 
@@ -11,8 +12,18 @@ const Home = () => <p>Test</p>
 class App extends Component {
   state = {
     settings: {
-      unit: 'kg'
-    }
+      unit: 'kg',
+      increment: {
+        kg: 2.5,
+        lb: 5
+      },
+      bar: {
+        kg: 20,
+        lb: 45
+      },
+      baseWorkouts: []
+    },
+    defaults
   }
 
   handleSettingsChange = e => {
@@ -23,14 +34,16 @@ class App extends Component {
     return (
       <Router>
         <div>
-          <div className="container level">
-            <div className="level-left">
-              <Link to="">Home</Link>
-            </div>
-            <div className="level-right">
-              <Link to="/settings">
-                <i className="fa fa-cog" aria-hidden="true" />
-              </Link>
+          <div className="container">
+            <div className="columns is-mobile">
+              <div className="column">
+                <Link to="">Home</Link>
+              </div>
+              <div className="column has-text-right">
+                <Link to="/settings">
+                  <i className="fa fa-cog" aria-hidden="true" />
+                </Link>
+              </div>
             </div>
           </div>
           <section className="container box">

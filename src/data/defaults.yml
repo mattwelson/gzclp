@@ -1,0 +1,21 @@
+unit: kg,
+increment:
+  kg: 2.5,
+  lb: 5
+bar:
+  kg: 20,
+  lb: 45
+baseWorkouts:
+  - name: a1
+    order: 0
+    tier1:
+      - squat
+    tier2:
+      - bench
+    tier3:
+      - latpull
+progressions:
+  tier1:
+    - '5x3'
+    - '6x2'
+    - 10x1
