@@ -3,7 +3,8 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 
 import NoMatch from './NoMatch'
 import SettingsPage from './SettingsPage'
-import defaults from '../../data/defaults.yml'
+import Workout from './Workout'
+import defaults from '../../data/defaults'
 
 import './App.css'
 
@@ -12,18 +13,8 @@ const Home = () => <p>Test</p>
 class App extends Component {
   state = {
     settings: {
-      unit: 'kg',
-      increment: {
-        kg: 2.5,
-        lb: 5
-      },
-      bar: {
-        kg: 20,
-        lb: 45
-      },
-      baseWorkouts: []
-    },
-    defaults
+      ...defaults
+    }
   }
 
   handleSettingsChange = e => {
@@ -57,6 +48,10 @@ class App extends Component {
                     onSettingsChange={this.handleSettingsChange}
                     settings={this.state.settings}
                   />}
+              />
+              <Route
+                path="/workout"
+                render={props => <Workout {...this.state} />}
               />
               <Route component={NoMatch} />
             </Switch>
