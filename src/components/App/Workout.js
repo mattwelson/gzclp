@@ -2,12 +2,39 @@ import React from 'react'
 
 import PlateCalculator from '../utility/PlateCalculator'
 
+import { nextWorkout, prettyString } from '../../logic/core'
+
+const Tiers = ({ workout, unit }) =>
+  <div>
+    {workout &&
+      Object.keys(workout).map(tier =>
+        <div key={tier}>
+          <h1>
+            {prettyString(tier)}
+          </h1>
+          {Object.keys(workout[tier]).map(exercise => {
+            const plan = workout[tier][exercise]
+            return (
+              <div key={`${tier}_${exercise}`}>
+                {prettyString(exercise)} - {plan.scheme}:{' '}
+                {`${plan.weight}${unit}`}
+              </div>
+            )
+          })}
+        </div>
+      )}
+  </div>
+
 class Workout extends React.Component {
   state = {}
 
   componentDidMount() {
+    const { baseWorkouts } = this.props.settings
+    const { nextWeights } = this.props
+    const workout = nextWorkout(nextWeights, baseWorkouts[0])
+
     this.setState(() => ({
-      weight: 50
+      workout
     }))
   }
 
@@ -21,18 +48,9 @@ class Workout extends React.Component {
   }
 
   render() {
-    const { baseWorkouts, progressions, prettyText, unit } = this.props.settings
     return (
       <div>
-        <h1>Tier 1</h1>
-        <p>
-          {baseWorkouts[0]['tier1'].map((x, i) =>
-            <span key={`${x}_${i}`}>
-              {prettyText[x] || x} - {progressions['tier1'][0]}:{' '}
-              {`${this.state.weight}${unit}`}
-            </span>
-          )}
-        </p>
+        <Tiers workout={this.state.workout} unit={this.props.settings.unit} />
         <PlateCalculator
           {...this.props}
           weight={this.state.weight}

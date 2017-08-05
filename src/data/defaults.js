@@ -45,7 +45,10 @@ export default {
     ohp: 'overhead press',
     latpull: 'lat pulldown',
     dbrow: 'dumbbell row',
-    bench: 'bench press'
+    bench: 'bench press',
+    tier1: 'tier 1',
+    tier2: 'tier 2',
+    tier3: 'tier 3'
   },
   rest: {
     tier1: {

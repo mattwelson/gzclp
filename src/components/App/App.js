@@ -5,6 +5,8 @@ import NoMatch from './NoMatch'
 import SettingsPage from './SettingsPage'
 import Workout from './Workout'
 import defaults from '../../data/defaults'
+import { startingWeights } from '../../data/examples'
+import { getFirstNextWorkouts } from '../../logic/core'
 
 import './App.css'
 
@@ -17,11 +19,21 @@ class App extends Component {
     }
   }
 
+  componentDidMount() {
+    // load in the starting weights
+    // load in previous workouts
+    // load in the nextWeights
+    this.setState(() => ({
+      nextWeights: getFirstNextWorkouts(startingWeights, defaults.progressions)
+    }))
+  }
+
   handleSettingsChange = e => {
     console.log({ me: this, e })
   }
 
   render() {
+    if (!this.state.nextWeights) return <p>Loading...</p>
     return (
       <Router>
         <div>

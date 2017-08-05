@@ -1,11 +1,34 @@
 import {
+  prettyString,
   splitScheme,
   getGoalFromScheme,
   getNextScheme,
   hitTargets,
   hitTargetsT3,
-  generateNextAfterExercise
+  generateNextAfterExercise,
+  getFirstNextWorkouts,
+  nextWorkout
 } from './core'
+
+import defaults from '../data/defaults'
+
+describe('prettyString', () => {
+  it('replaces word', () => {
+    expect(prettyString('ohp')).toBe('Overhead Press')
+  })
+
+  it("Upper cases words that it doesn't know", () => {
+    expect(prettyString('pineapple')).toBe('Pineapple')
+  })
+
+  it('Upper cases eachword', () => {
+    expect(prettyString('pineapple on a pizza')).toBe('Pineapple On A Pizza')
+  })
+
+  it('splits tier1 into Tier 1', () => {
+    expect(prettyString('tier1')).toBe('Tier 1')
+  })
+})
 
 describe('splitScheme', () => {
   it('returns correct sets and reps', () => {
@@ -173,5 +196,76 @@ describe('generateNextAfterExercise', () => {
 
     expect(result.tier1.bench.scheme).toEqual('5x3')
     expect(result.tier1.bench.weight).toEqual(77.5)
+  })
+})
+
+describe('getFirstNextWorkouts', () => {
+  const startingWeights = {
+    tier1: {
+      bench: 85,
+      squat: 130,
+      deadlift: 140,
+      ohp: 40
+    },
+    tier2: {
+      bench: 60,
+      squat: 90,
+      deadlift: 90,
+      ohp: 20
+    },
+    tier3: {
+      latpull: 30,
+      dbrow: 10
+    }
+  }
+
+  it('generates workout from starting weights', () => {
+    const result = getFirstNextWorkouts(startingWeights, defaults.progressions)
+    expect(result.tier1.bench.scheme).toEqual('5x3')
+  })
+})
+
+describe('nextWorkout', () => {
+  const nextWeights = {
+    tier1: {
+      squat: {
+        scheme: '6x2',
+        weight: 57.5
+      },
+      bench: {}
+    },
+    tier2: {
+      bench: {
+        scheme: '3x10',
+        weight: 40
+      }
+    },
+    tier3: {
+      latpull: {
+        weight: 10
+      }
+    }
+  }
+  it('generates a plan', () => {
+    const result = nextWorkout(nextWeights, defaults.baseWorkouts[0])
+    expect(result).toEqual({
+      tier1: {
+        squat: {
+          scheme: '6x2',
+          weight: 57.5
+        }
+      },
+      tier2: {
+        bench: {
+          scheme: '3x10',
+          weight: 40
+        }
+      },
+      tier3: {
+        latpull: {
+          weight: 10
+        }
+      }
+    })
   })
 })

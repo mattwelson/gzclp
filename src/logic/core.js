@@ -1,3 +1,12 @@
+import defaults from '../data/defaults'
+
+export const prettyString = (text, toUpper = true) =>
+  (defaults.prettyText[text] || text)
+    .replace(
+      /\w\S*/g,
+      w => `${toUpper ? w[0].toUpperCase() : w[0]}${w.substr(1)}`
+    )
+
 export const splitScheme = (scheme, delineator = 'x') =>
   scheme.split(delineator).map(Number)
 
@@ -59,11 +68,38 @@ export const generateNextAfterExercise = (
   return newNextWeights
 }
 
+export const getFirstNextWorkouts = (startingWeights, progressions) => {
+  const result = {}
+  Object.keys(startingWeights).forEach(tier => {
+    result[tier] = {}
+    Object.keys(startingWeights[tier]).forEach(exercise => {
+      result[tier][exercise] = {
+        weight: startingWeights[tier][exercise],
+        scheme: progressions[tier][0]
+      }
+    })
+  })
+  return result
+}
+
+export const nextWorkout = (nextWeights, baseWorkout) => {
+  const result = {}
+  Object.keys(baseWorkout).forEach(tier => {
+    result[tier] = {}
+    baseWorkout[tier].forEach(exercise => {
+      result[tier][exercise] = nextWeights[tier][exercise]
+    })
+  })
+  return result
+}
+
 export default {
   splitScheme,
   getGoalFromScheme,
   getNextScheme,
   hitTargets,
   deload,
-  generateNextAfterExercise
+  generateNextAfterExercise,
+  getFirstNextWorkouts,
+  nextWorkout
 }
