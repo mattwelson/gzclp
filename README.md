@@ -17,3 +17,5 @@ An easy to use webapp that guides workouts and tracks progress for beginner to i
 - A setup introduction flow
 - Amrap sets with tracking
 - Adjustable weights and plate calculator
+
+Be sure to check out the original reddit thread on GZCLP
