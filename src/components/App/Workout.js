@@ -71,6 +71,7 @@ class Workout extends React.Component {
             {...this.props}
             workout={this.state.workout}
             onUpdate={this.handleUpdate}
+            onClose={this.handleClose}
             {...this.state.editOpen}
           />}
       </div>
