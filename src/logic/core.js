@@ -93,6 +93,22 @@ export const nextWorkout = (nextWeights, baseWorkout) => {
   return result
 }
 
+export const reducePlates = ({ used = [], remainder }, plate) => ({
+  used: [...used, [plate, Math.floor(remainder / plate)]],
+  remainder: remainder % plate
+})
+
+export const getPlatesArray = (weight, unit) => {
+  const [plates, bar] = [defaults.plates[unit], defaults.bars[unit]]
+  const perSide = (weight - bar) / 2
+
+  const reduced = plates.reduce(reducePlates, { remainder: perSide })
+  return {
+    ...reduced,
+    used: reduced.used.filter(([plate, count]) => count > 0)
+  }
+}
+
 export default {
   splitScheme,
   getGoalFromScheme,
@@ -101,5 +117,7 @@ export default {
   deload,
   generateNextAfterExercise,
   getFirstNextWorkouts,
-  nextWorkout
+  nextWorkout,
+  getPlatesArray,
+  reducePlates
 }

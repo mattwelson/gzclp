@@ -7,7 +7,9 @@ import {
   hitTargetsT3,
   generateNextAfterExercise,
   getFirstNextWorkouts,
-  nextWorkout
+  nextWorkout,
+  getPlatesArray,
+  reducePlates
 } from './core'
 
 import defaults from '../data/defaults'
@@ -267,5 +269,60 @@ describe('nextWorkout', () => {
         }
       }
     })
+  })
+})
+
+describe('reducePlates', () => {
+  const firstReduce = reducePlates({ remainder: 55 }, 20)
+  it('reduces the remainder value', () => {
+    expect(firstReduce.remainder).toBe(15)
+  })
+
+  it('adds the correct plate value', () => {
+    expect(firstReduce.used).toEqual([[20, 2]])
+  })
+
+  it('preserves the plate values', () => {
+    const secondReduce = reducePlates(firstReduce, 10)
+    expect(secondReduce.remainder).toBe(5)
+    expect(secondReduce.used).toEqual([[20, 2], [10, 1]])
+  })
+
+  it("does't act if not needed", () => {
+    const result = reducePlates({ remainder: 10 }, 25)
+    expect(result.remainder).toBe(10)
+  })
+})
+
+describe('getPlatesArray', () => {
+  it('returns an empty object if weight is equal to bar', () => {
+    const result = getPlatesArray(20, 'kg')
+    expect(result.used).toEqual([])
+  })
+
+  it('returns the correct array for 22.5', () => {
+    const result = getPlatesArray(22.5, 'kg')
+    expect(result.used).toEqual([[1.25, 1]])
+  })
+
+  it('returns the correct array for multiple different plates', () => {
+    const result = getPlatesArray(77.5, 'kg')
+    expect(result.used).toEqual([[20, 1], [5, 1], [2.5, 1], [1.25, 1]])
+  })
+
+  it('returns the correct array for multiple 20kg plates', () => {
+    const result = getPlatesArray(177.5, 'kg')
+    expect(result.used).toEqual([[20, 3], [15, 1], [2.5, 1], [1.25, 1]])
+  })
+
+  it('works in pounds', () => {
+    const result = getPlatesArray(400, 'lb')
+    expect(result.used).toEqual([[45, 3], [35, 1], [5, 1], [2.5, 1]])
+  })
+
+  it('returns remainder', () => {
+    const result = getPlatesArray(26, 'kg')
+    expect(result.used).toEqual([[2.5, 1]])
+    expect(result.remainder).toEqual(0.5)
   })
 })

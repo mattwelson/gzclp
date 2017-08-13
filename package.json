@@ -6,7 +6,7 @@
     "react-scripts": "1.0.10"
   },
   "dependencies": {
-    "bulma": "^0.4.4",
+    "bulma": "^0.5.1",
     "eslint-plugin-prettier": "^2.1.2",
     "husky": "^0.14.3",
     "lint-staged": "^4.0.2",

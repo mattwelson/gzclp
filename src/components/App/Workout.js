@@ -9,9 +9,9 @@ const Tiers = ({ workout, unit, onOpenEdit }) =>
     {workout &&
       Object.keys(workout).map(tier =>
         <div key={tier}>
-          <h1>
+          <div className="has-text-grey-light">
             {prettyString(tier)}
-          </h1>
+          </div>
           {Object.keys(workout[tier]).map(exercise => {
             const plan = workout[tier][exercise]
             return (

@@ -1,6 +1,21 @@
 import React from 'react'
 
-import { prettyString } from '../../logic/core'
+import { prettyString, getPlatesArray } from '../../logic/core'
+
+const PlateDisplay = ({ plates, bar, unit }) =>
+  <div className="plates">
+    Plates:
+    <div>
+      1x Bar ({bar}
+      {unit})
+    </div>
+    {plates.used.map(([weight, count]) =>
+      <div key={`${weight}_${count}`}>
+        {count}x {weight}
+        {unit}
+      </div>
+    )}
+  </div>
 
 const PlateCalculator = ({
   workout,
@@ -18,19 +33,36 @@ const PlateCalculator = ({
         <h4 className="subtitle">
           {prettyString(tier)} {prettyString(exercise)}
         </h4>
-        {`${workout[tier][exercise].weight}${settings.unit}`}
-        <p className="field">
-          <button className="button" onClick={() => onUpdate(-1)}>
-            <span className="icon is-small">
-              <i className="fa fa-minus" />
-            </span>
-          </button>
-          <button className="button" onClick={() => onUpdate(1)}>
-            <span className="icon is-small">
-              <i className="fa fa-plus" />
-            </span>
-          </button>
-        </p>
+        <div className="level is-mobile">
+          <div className="level-left">
+            <h2 className="title">{`${workout[tier][exercise]
+              .weight}${settings.unit}`}</h2>
+          </div>
+          <div className="level-right">
+            <p className="field">
+              <button className="button" onClick={() => onUpdate(-1)}>
+                <span className="icon is-small">
+                  <i className="fa fa-minus" />
+                </span>
+              </button>
+              <button className="button" onClick={() => onUpdate(1)}>
+                <span className="icon is-small">
+                  <i className="fa fa-plus" />
+                </span>
+              </button>
+            </p>
+          </div>
+        </div>
+        <div className="box">
+          <PlateDisplay
+            plates={getPlatesArray(
+              workout[tier][exercise].weight,
+              settings.unit
+            )}
+            bar={settings.bars[settings.unit]}
+            unit={settings.unit}
+          />
+        </div>
       </div>
     </div>
     <button className="modal-close is-large" onClick={onClose} />
