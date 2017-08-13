@@ -4,7 +4,7 @@ import PlateCalculator from '../utility/PlateCalculator'
 
 import { nextWorkout, prettyString } from '../../logic/core'
 
-const Tiers = ({ workout, unit }) =>
+const Tiers = ({ workout, unit, onOpenEdit }) =>
   <div>
     {workout &&
       Object.keys(workout).map(tier =>
@@ -17,7 +17,9 @@ const Tiers = ({ workout, unit }) =>
             return (
               <div key={`${tier}_${exercise}`}>
                 {prettyString(exercise)} - {plan.scheme}:{' '}
-                {`${plan.weight}${unit}`}
+                <a
+                  onClick={() => onOpenEdit({ exercise, tier })}
+                >{`${plan.weight}${unit}`}</a>
               </div>
             )
           })}
@@ -26,7 +28,7 @@ const Tiers = ({ workout, unit }) =>
   </div>
 
 class Workout extends React.Component {
-  state = {}
+  state = { editOpen: false }
 
   componentDidMount() {
     const { baseWorkouts } = this.props.settings
@@ -41,21 +43,36 @@ class Workout extends React.Component {
   // upDown is a positive or negative int, 1 or -1
   handleUpdate = upDown => {
     const { increments, unit } = this.props.settings
+    const { tier, exercise } = this.state.editOpen
     const increment = increments[unit]
-    this.setState(s => ({
-      weight: s.weight + increment * upDown
+    const newWorkout = { ...this.state.workout }
+    const weight = newWorkout[tier][exercise].weight
+    newWorkout[tier][exercise].weight = weight + increment * upDown
+    this.setState(() => ({
+      workout: newWorkout
     }))
   }
+
+  handleOpen = ({ exercise, tier }) =>
+    this.setState(() => ({ editOpen: { exercise, tier } }))
+
+  handleClose = () => this.setState(() => ({ editOpen: null }))
 
   render() {
     return (
       <div>
-        <Tiers workout={this.state.workout} unit={this.props.settings.unit} />
-        <PlateCalculator
-          {...this.props}
-          weight={this.state.weight}
-          onUpdate={this.handleUpdate}
+        <Tiers
+          workout={this.state.workout}
+          unit={this.props.settings.unit}
+          onOpenEdit={this.handleOpen}
         />
+        {this.state.editOpen &&
+          <PlateCalculator
+            {...this.props}
+            workout={this.state.workout}
+            onUpdate={this.handleUpdate}
+            {...this.state.editOpen}
+          />}
       </div>
     )
   }

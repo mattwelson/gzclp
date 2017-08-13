@@ -1,8 +1,14 @@
 import React from 'react'
 
-const PlateCalculator = ({ weight, settings, onUpdate }) =>
+import { prettyString } from '../../logic/core'
+
+const PlateCalculator = ({ workout, settings, onUpdate, exercise, tier }) =>
   <div className="box">
-    {`${weight}${settings.unit}`}
+    <h3 className="title">Edit weight</h3>
+    <h4 className="subtitle">
+      {prettyString(tier)} {prettyString(exercise)}
+    </h4>
+    {`${workout[tier][exercise].weight}${settings.unit}`}
     <p className="field">
       <button className="button" onClick={() => onUpdate(-1)}>
         <span className="icon is-small">

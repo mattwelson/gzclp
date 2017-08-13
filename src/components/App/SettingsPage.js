@@ -15,7 +15,9 @@ const SettingsPage = props =>
             <input
               type="radio"
               name="unit"
-              onChange={props.handleSettingsChange}
+              onChange={props.onSettingsChange}
+              value="kg"
+              checked={props.settings.unit === 'kg'}
             />
             &nbsp;Kg
           </label>
@@ -23,7 +25,9 @@ const SettingsPage = props =>
             <input
               type="radio"
               name="unit"
-              onChange={props.handleSettingsChange}
+              onChange={props.onSettingsChange}
+              value="lb"
+              checked={props.settings.unit === 'lb'}
             />
             &nbsp;Lb
           </label>

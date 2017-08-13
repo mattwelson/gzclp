@@ -10,7 +10,10 @@ import { getFirstNextWorkouts } from '../../logic/core'
 
 import './App.css'
 
-const Home = () => <p>Test</p>
+const Home = () =>
+  <p>
+    <Link to="/workout">Workout</Link>
+  </p>
 
 class App extends Component {
   state = {
@@ -29,7 +32,13 @@ class App extends Component {
   }
 
   handleSettingsChange = e => {
-    console.log({ me: this, e })
+    const t = e.target
+    this.setState(state => ({
+      settings: {
+        ...state.settings,
+        [t.name]: t.value
+      }
+    }))
   }
 
   render() {
@@ -40,7 +49,7 @@ class App extends Component {
           <div className="container">
             <div className="columns is-mobile">
               <div className="column">
-                <Link to="">Home</Link>
+                <Link to="/">Gzclp</Link>
               </div>
               <div className="column has-text-right">
                 <Link to="/settings">
@@ -63,7 +72,7 @@ class App extends Component {
               />
               <Route
                 path="/workout"
-                render={props => <Workout {...this.state} />}
+                render={props => <Workout {...props} {...this.state} />}
               />
               <Route component={NoMatch} />
             </Switch>
