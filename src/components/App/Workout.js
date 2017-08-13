@@ -2,7 +2,39 @@ import React from 'react'
 
 import PlateCalculator from '../utility/PlateCalculator'
 
-import { nextWorkout, prettyString } from '../../logic/core'
+import './Workout.css'
+
+import {
+  nextWorkout,
+  prettyString,
+  splitScheme,
+  getGoalFromScheme
+} from '../../logic/core'
+
+const Excercise = ({ sets, onOpenEdit, tier, exercise, unit }) => {
+  const goal = getGoalFromScheme(splitScheme(sets.scheme))
+  return (
+    <div>
+      <div className="is-size-5">
+        {prettyString(exercise)} - {sets.scheme}:{' '}
+        <a
+          className="exercise__weight"
+          onClick={() => onOpenEdit({ exercise, tier })}
+        >{`${sets.weight}${unit}`}</a>
+      </div>
+
+      <div
+        className={`columns is-mobile exercise__goal exercise__goal--${goal.length}`}
+      >
+        {goal.map((reps, i) =>
+          <div className="column" key={i}>
+            {reps}
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
 
 const Tiers = ({ workout, unit, onOpenEdit }) =>
   <div>
@@ -12,17 +44,16 @@ const Tiers = ({ workout, unit, onOpenEdit }) =>
           <div className="has-text-grey-light">
             {prettyString(tier)}
           </div>
-          {Object.keys(workout[tier]).map(exercise => {
-            const plan = workout[tier][exercise]
-            return (
-              <div key={`${tier}_${exercise}`}>
-                {prettyString(exercise)} - {plan.scheme}:{' '}
-                <a
-                  onClick={() => onOpenEdit({ exercise, tier })}
-                >{`${plan.weight}${unit}`}</a>
-              </div>
-            )
-          })}
+          {Object.keys(workout[tier]).map(exercise =>
+            <Excercise
+              key={`${tier}_${exercise}`}
+              onOpenEdit={onOpenEdit}
+              tier={tier}
+              exercise={exercise}
+              unit={unit}
+              sets={workout[tier][exercise]}
+            />
+          )}
         </div>
       )}
   </div>

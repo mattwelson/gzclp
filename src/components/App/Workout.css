@@ -1,0 +1,12 @@
+.exercise__goal {
+  flex-wrap: wrap;
+  margin: 0 auto;
+}
+
+.exercise__goal:last-child {
+  margin-bottom: 1em;
+}
+
+.exercise__goal--10 .column {
+  min-width: 20%;
+}
