@@ -9,7 +9,8 @@ import {
   getFirstNextWorkouts,
   nextWorkout,
   getPlatesArray,
-  reducePlates
+  reducePlates,
+  formatMilliseconds
 } from './core'
 
 import defaults from '../data/defaults'
@@ -324,5 +325,27 @@ describe('getPlatesArray', () => {
     const result = getPlatesArray(26, 'kg')
     expect(result.used).toEqual([[2.5, 1]])
     expect(result.remainder).toEqual(0.5)
+  })
+})
+
+describe('formatMilliseconds', () => {
+  it('returns for 97 seconds', () => {
+    const result = formatMilliseconds(97243)
+    expect(result).toBe('1:37')
+  })
+
+  it('returns for sub minute times', () => {
+    const result = formatMilliseconds(41243)
+    expect(result).toBe('0:41')
+  })
+
+  it('returns for sub second times', () => {
+    const result = formatMilliseconds(43)
+    expect(result).toBe('0:00')
+  })
+
+  it('returns for sub 10 second times', () => {
+    const result = formatMilliseconds(9043)
+    expect(result).toBe('0:09')
   })
 })

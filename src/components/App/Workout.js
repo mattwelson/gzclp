@@ -1,6 +1,7 @@
 import React from 'react'
 
 import PlateCalculator from '../utility/PlateCalculator'
+import TimerView from '../utility/TimerView'
 
 import './Workout.css'
 
@@ -11,33 +12,39 @@ import {
   getGoalFromScheme
 } from '../../logic/core'
 
-const Excercise = ({ sets, onOpenEdit, tier, exercise, unit }) => {
+const Reps = ({ reps }) =>
+  <div className="column">
+    <button className="button is-info">
+      {reps}
+    </button>
+  </div>
+
+const Excercise = ({ sets, onOpenEdit, tier, exercise, unit, miniMode }) => {
   const goal = getGoalFromScheme(splitScheme(sets.scheme))
   return (
     <div>
       <div className="is-size-5">
         {prettyString(exercise)} - {sets.scheme}:{' '}
-        <a
-          className="exercise__weight"
-          onClick={() => onOpenEdit({ exercise, tier })}
-        >{`${sets.weight}${unit}`}</a>
+        {miniMode ||
+          <a
+            className="exercise__weight"
+            onClick={() => onOpenEdit({ exercise, tier })}
+          >{`${sets.weight}${unit}`}</a>}
+        {miniMode &&
+          <strong className="exercise__weight">{`${sets.weight}${unit}`}</strong>}
       </div>
-
-      <div
-        className={`columns is-mobile exercise__goal exercise__goal--${goal.length}`}
-      >
-        {goal.map((reps, i) =>
-          <div className="column" key={i}>
-            {reps}
-          </div>
-        )}
-      </div>
+      {miniMode ||
+        <div
+          className={`columns is-mobile exercise__goal exercise__goal--${goal.length}`}
+        >
+          {goal.map((reps, i) => <Reps key={i} reps={reps} />)}
+        </div>}
     </div>
   )
 }
 
-const Tiers = ({ workout, unit, onOpenEdit }) =>
-  <div>
+export const WorkoutTiers = ({ workout, unit, onOpenEdit, miniMode }) =>
+  <div className={miniMode ? 'tiers__mini' : 'tiers'}>
     {workout &&
       Object.keys(workout).map(tier =>
         <div key={tier}>
@@ -52,6 +59,7 @@ const Tiers = ({ workout, unit, onOpenEdit }) =>
               exercise={exercise}
               unit={unit}
               sets={workout[tier][exercise]}
+              miniMode={miniMode}
             />
           )}
         </div>
@@ -59,7 +67,7 @@ const Tiers = ({ workout, unit, onOpenEdit }) =>
   </div>
 
 class Workout extends React.Component {
-  state = { editOpen: false }
+  state = { editOpen: false, showTimer: true }
 
   componentDidMount() {
     const { baseWorkouts } = this.props.settings
@@ -87,12 +95,13 @@ class Workout extends React.Component {
   handleOpen = ({ exercise, tier }) =>
     this.setState(() => ({ editOpen: { exercise, tier } }))
 
-  handleClose = () => this.setState(() => ({ editOpen: null }))
+  handlePlateCalcClose = () => this.setState(() => ({ editOpen: null }))
+  handleTimerClose = () => this.setState(() => ({ showTimer: false }))
 
   render() {
     return (
       <div>
-        <Tiers
+        <WorkoutTiers
           workout={this.state.workout}
           unit={this.props.settings.unit}
           onOpenEdit={this.handleOpen}
@@ -102,8 +111,14 @@ class Workout extends React.Component {
             {...this.props}
             workout={this.state.workout}
             onUpdate={this.handleUpdate}
-            onClose={this.handleClose}
+            onClose={this.handlePlateCalcClose}
             {...this.state.editOpen}
+          />}
+        {this.state.showTimer &&
+          <TimerView
+            rest={90}
+            message="Take a break"
+            dismiss={this.handleTimerClose}
           />}
       </div>
     )

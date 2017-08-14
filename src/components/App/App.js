@@ -3,17 +3,27 @@ import { BrowserRouter as Router, Route, Link, Switch } from 'react-router-dom'
 
 import NoMatch from './NoMatch'
 import SettingsPage from './SettingsPage'
-import Workout from './Workout'
+import Workout, { WorkoutTiers } from './Workout'
+import About from './About'
 import defaults from '../../data/defaults'
 import { startingWeights } from '../../data/examples'
-import { getFirstNextWorkouts } from '../../logic/core'
+import { getFirstNextWorkouts, nextWorkout } from '../../logic/core'
 
 import './App.css'
 
-const Home = () =>
-  <p>
-    <Link to="/workout">Workout</Link>
-  </p>
+const Home = ({ workout, settings }) =>
+  <div>
+    <div className="columns">
+      <div className="column">
+        <WorkoutTiers workout={workout} unit={settings.unit} miniMode={true} />
+        <Link to="/workout" className="button is-primary is-medium">
+          Get started
+        </Link>
+      </div>
+    </div>
+    <hr />
+    <About settings={settings} />
+  </div>
 
 class App extends Component {
   state = {
@@ -60,7 +70,18 @@ class App extends Component {
           </div>
           <section className="container box">
             <Switch>
-              <Route component={Home} path="/" exact />
+              <Route
+                path="/"
+                exact
+                render={() =>
+                  <Home
+                    workout={nextWorkout(
+                      this.state.nextWeights,
+                      this.state.settings.baseWorkouts[0]
+                    )}
+                    settings={this.state.settings}
+                  />}
+              />
               <Route
                 path="/settings"
                 render={props =>

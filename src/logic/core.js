@@ -109,6 +109,13 @@ export const getPlatesArray = (weight, unit) => {
   }
 }
 
+export const formatMilliseconds = milliseconds => {
+  const seconds = Math.floor(milliseconds % 60000 / 1000)
+  return `${Math.floor(milliseconds / 60000)}:${seconds > 10
+    ? seconds
+    : '0' + seconds}`
+}
+
 export default {
   splitScheme,
   getGoalFromScheme,
@@ -119,5 +126,6 @@ export default {
   getFirstNextWorkouts,
   nextWorkout,
   getPlatesArray,
-  reducePlates
+  reducePlates,
+  formatMilliseconds
 }

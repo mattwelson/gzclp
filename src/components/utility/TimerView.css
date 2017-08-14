@@ -1,0 +1,12 @@
+.timer {
+  position: fixed;
+  bottom: 1em;
+  right: 1em;
+  left: 1em;
+}
+
+.timer .notification {
+  max-width: 30em;
+  width: 100%;
+  margin: 0 auto;
+}
