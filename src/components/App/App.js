@@ -11,7 +11,7 @@ import { getFirstNextWorkouts, nextWorkout } from '../../logic/core'
 
 import './App.css'
 
-const Home = ({ workout, settings }) =>
+const Home = ({ workout, settings }) => (
   <div>
     <div className="columns">
       <div className="column">
@@ -24,6 +24,7 @@ const Home = ({ workout, settings }) =>
     <hr />
     <About settings={settings} />
   </div>
+)
 
 class App extends Component {
   state = {
@@ -73,27 +74,35 @@ class App extends Component {
               <Route
                 path="/"
                 exact
-                render={() =>
+                render={() => (
                   <Home
                     workout={nextWorkout(
                       this.state.nextWeights,
                       this.state.settings.baseWorkouts[0]
                     )}
                     settings={this.state.settings}
-                  />}
+                  />
+                )}
               />
               <Route
                 path="/settings"
-                render={props =>
+                render={props => (
                   <SettingsPage
                     {...props}
                     onSettingsChange={this.handleSettingsChange}
                     settings={this.state.settings}
-                  />}
+                  />
+                )}
               />
               <Route
                 path="/workout"
-                render={props => <Workout {...props} {...this.state} />}
+                render={props => (
+                  <Workout
+                    {...props}
+                    {...this.state}
+                    onSettingsChange={this.handleSettingsChange}
+                  />
+                )}
               />
               <Route component={NoMatch} />
             </Switch>

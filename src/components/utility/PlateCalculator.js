@@ -2,20 +2,21 @@ import React from 'react'
 
 import { prettyString, getPlatesArray } from '../../logic/core'
 
-const PlateDisplay = ({ plates, bar, unit }) =>
+const PlateDisplay = ({ plates, bar, unit }) => (
   <div className="plates">
     Plates:
     <div>
       1x Bar ({bar}
       {unit})
     </div>
-    {plates.used.map(([weight, count]) =>
+    {plates.used.map(([weight, count]) => (
       <div key={`${weight}_${count}`}>
         {count}x {weight}
         {unit}
       </div>
-    )}
+    ))}
   </div>
+)
 
 const PlateCalculator = ({
   workout,
@@ -23,8 +24,9 @@ const PlateCalculator = ({
   onUpdate,
   exercise,
   tier,
-  onClose
-}) =>
+  onClose,
+  onSettingsChange
+}) => (
   <div className="modal is-active">
     <div className="modal-background" onClick={onClose} />
     <div className="modal-content">
@@ -67,5 +69,6 @@ const PlateCalculator = ({
     </div>
     <button className="modal-close is-large" onClick={onClose} />
   </div>
+)
 
 export default PlateCalculator
