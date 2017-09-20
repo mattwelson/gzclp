@@ -1,11 +1,10 @@
 import defaults from '../data/defaults'
 
 export const prettyString = (text, toUpper = true) =>
-  (defaults.prettyText[text] || text)
-    .replace(
-      /\w\S*/g,
-      w => `${toUpper ? w[0].toUpperCase() : w[0]}${w.substr(1)}`
-    )
+  (defaults.prettyText[text] || text).replace(
+    /\w\S*/g,
+    w => `${toUpper ? w[0].toUpperCase() : w[0]}${w.substr(1)}`
+  )
 
 export const splitScheme = (scheme, delineator = 'x') =>
   scheme.split(delineator).map(Number)
@@ -110,8 +109,8 @@ export const getPlatesArray = (weight, unit) => {
 }
 
 export const formatMilliseconds = milliseconds => {
-  const seconds = Math.floor(milliseconds % 60000 / 1000)
-  return `${Math.floor(milliseconds / 60000)}:${seconds > 10
+  const seconds = Math.floor((milliseconds % 60000) / 1000)
+  return `${Math.floor(milliseconds / 60000)}:${seconds >= 10
     ? seconds
     : '0' + seconds}`
 }

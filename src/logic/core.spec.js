@@ -348,4 +348,9 @@ describe('formatMilliseconds', () => {
     const result = formatMilliseconds(9043)
     expect(result).toBe('0:09')
   })
+
+  it('returns for 1 minute 10 second times', () => {
+    const result = formatMilliseconds(70000)
+    expect(result).toBe('1:10')
+  })
 })
